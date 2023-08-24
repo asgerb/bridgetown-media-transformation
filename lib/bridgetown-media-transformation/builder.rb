@@ -20,7 +20,7 @@ module BridgetownMediaTransformation
       Bridgetown.logger.info "[media-transformation] Interlacing JPEG: #{interlace?}"
       Bridgetown.logger.info "[media-transformation] Optimizing: #{optimize?}"
 
-      helper :responsive_picture do |params|
+      helper :resp_picture do |params|
         src = params.fetch(:src)
         dest = params.fetch(:dest, src)
         lazy = params.fetch(:lazy) { false }
