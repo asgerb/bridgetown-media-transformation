@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r!^(test|script|spec|features|frontend)/!) }
   spec.test_files    = spec.files.grep(%r!^spec/!)
   spec.require_paths = ["lib"]
-  spec.metadata      = { "yarn-add" => "bridgetown-media-transformation@#{BridgetownMediaTransformation::VERSION}" }
+  # spec.metadata      = { "yarn-add" => "bridgetown-media-transformation@#{BridgetownMediaTransformation::VERSION}" }
 
   spec.required_ruby_version = ">= 2.5.0"
 
