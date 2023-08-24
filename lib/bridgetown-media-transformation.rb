@@ -4,7 +4,7 @@ require "bridgetown"
 require "bridgetown-media-transformation/media_transformation"
 require "bridgetown-media-transformation/builder"
 
-Bridgetown.initializer :bridgetown_media_transformation do |config|
+Bridgetown.initializer :"bridgetown-media-transformation" do |config|
   config.bridgetown_media_transformation ||= {}
   config.builder BridgetownMediaTransformation::Builder
 end
