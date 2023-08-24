@@ -21,11 +21,11 @@ module BridgetownMediaTransformation
       Bridgetown.logger.info "[media-transformation] Optimizing: #{optimize?}"
 
       helper :responsive_picture do |params|
-        src = params.fetch("src")
-        dest = params.fetch("dest", src)
-        lazy = params.fetch("lazy") { false }
-        attributes = params.fetch("attributes") { "" }
-        transformation_specs = params.fetch("transformation_specs") { default_transformation_specs }
+        src = params.fetch(:src)
+        dest = params.fetch(:dest, src)
+        lazy = params.fetch(:lazy) { false }
+        attributes = params.fetch(:attributes) { "" }
+        transformation_specs = params.fetch(:transformation_specs) { default_transformation_specs }
         transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
         @media_transformations << transformation
 
