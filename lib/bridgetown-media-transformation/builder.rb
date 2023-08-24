@@ -20,6 +20,18 @@ module BridgetownMediaTransformation
       Bridgetown.logger.info "[media-transformation] Interlacing JPEG: #{interlace?}"
       Bridgetown.logger.info "[media-transformation] Optimizing: #{optimize?}"
 
+      helper :responsive_picture do |params|
+        src = params.fetch("src")
+        dest = params.fetch("dest", src)
+        lazy = params.fetch("lazy") { false }
+        attributes = params.fetch("attributes") { "" }
+        transformation_specs = params.fetch("transformation_specs") { default_transformation_specs }
+        transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
+        @media_transformations << transformation
+
+        picture_tag(src: src, dest: dest, file_hash: transformation.file_hash, lazy: lazy, attributes: attributes, transformation_specs: transformation_specs)
+      end
+
       liquid_tag "resp_picture", as_block: true do |attributes, tag|
         @attributes = attributes.split(",").map(&:strip)
         src = tag.context["src"]
@@ -67,12 +79,12 @@ module BridgetownMediaTransformation
     def verbose?
       options.dig(:verbose) || Bridgetown.environment == "production"
     end
-    
+
     private
 
     def kargs
       return {} unless attributes.size > 1
-      
+
       json_payload = attributes[1..].join(", ")
       @kargs = JSON.parse(JSON.parse(json_payload).gsub("'", "\""))
     end
