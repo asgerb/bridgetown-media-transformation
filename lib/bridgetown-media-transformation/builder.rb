@@ -110,5 +110,3 @@ module BridgetownMediaTransformation
     end
   end
 end
-
-BridgetownMediaTransformation::Builder.register
