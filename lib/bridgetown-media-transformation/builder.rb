@@ -20,32 +20,8 @@ module BridgetownMediaTransformation
       Bridgetown.logger.info "[media-transformation] Interlacing JPEG: #{interlace?}"
       Bridgetown.logger.info "[media-transformation] Optimizing: #{optimize?}"
 
-      helper :resp_picture do |params|
-        src = params.fetch(:src)
-        dest = params.fetch(:dest, src)
-        lazy = params.fetch(:lazy) { false }
-        attributes = params.fetch(:attributes) { "" }
-        transformation_specs = params.fetch(:transformation_specs) { default_transformation_specs }
-        transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
-        @media_transformations << transformation
-
-        picture_tag(src: src, dest: dest, file_hash: transformation.file_hash, lazy: lazy, attributes: attributes, transformation_specs: transformation_specs)
-      end
-
-      liquid_tag "resp_picture", as_block: true do |attributes, tag|
-        @attributes = attributes.split(",").map(&:strip)
-        src = tag.context["src"]
-        dest = tag.context["dest"]
-        src ||= @attributes.first
-        dest ||= src
-        lazy = kargs.fetch("lazy") { false }
-        transformation_specs = kargs.fetch("transformation_specs") { default_transformation_specs }
-
-        transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
-        @media_transformations << transformation
-
-        picture_tag(src: src, dest: dest, file_hash: transformation.file_hash, lazy: lazy, attributes: tag.content, transformation_specs: transformation_specs)
-      end
+      helper :resp_picture, :resp_picture_helper
+      liquid_tag :resp_picture, :resp_picture_tag, as_block: true
 
       unless Bridgetown.environment == "test"
         hook :site, :post_write do |site|
@@ -53,6 +29,33 @@ module BridgetownMediaTransformation
           media_transformations.each { |transformation| transformation.process }
         end
       end
+    end
+
+    def resp_picture_helper(params)
+      src = params.fetch(:src)
+      dest = params.fetch(:dest, src)
+      lazy = params.fetch(:lazy) { false }
+      attributes = params.fetch(:attributes) { "" }
+      transformation_specs = params.fetch(:transformation_specs) { default_transformation_specs }
+      transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
+      @media_transformations << transformation
+
+      picture_tag(src: src, dest: dest, file_hash: transformation.file_hash, lazy: lazy, attributes: attributes, transformation_specs: transformation_specs)
+    end
+
+    def resp_picture_tag(attributes, tag)
+      @attributes = attributes.split(",").map(&:strip)
+      src = tag.context["src"]
+      dest = tag.context["dest"]
+      src ||= @attributes.first
+      dest ||= src
+      lazy = kargs.fetch("lazy") { false }
+      transformation_specs = kargs.fetch("transformation_specs") { default_transformation_specs }
+
+      transformation = MediaTransformation.new(dest: dest, src: src, specs: transformation_specs, optimize: optimize?, interlace: interlace?, site: site, builder: self)
+      @media_transformations << transformation
+
+      picture_tag(src: src, dest: dest, file_hash: transformation.file_hash, lazy: lazy, attributes: tag.content, transformation_specs: transformation_specs)
     end
 
     def picture_tag(src: "", dest: "", file_hash:, lazy: false, attributes:, transformation_specs:)

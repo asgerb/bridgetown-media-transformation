@@ -1,9 +1,18 @@
 # frozen_string_literal: true
 
 require "bridgetown"
+
+Bridgetown.begin!
+
 require File.expand_path("../lib/bridgetown-media-transformation", __dir__)
 
 Bridgetown.logger.log_level = :error
+
+module TestValues
+  class << self
+    attr_accessor :config
+  end
+end
 
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
@@ -27,6 +36,6 @@ RSpec.configure do |config|
   end
 
   def make_context(registers = {})
-    Liquid::Context.new({}, {}, { :site => site }.merge(registers))
+    Liquid::Context.new({}, {}, { site: site }.merge(registers))
   end
 end
