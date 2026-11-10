@@ -17,9 +17,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   # spec.metadata      = { "yarn-add" => "bridgetown-media-transformation@#{BridgetownMediaTransformation::VERSION}" }
 
-  spec.required_ruby_version = ">= 2.5.0"
+  spec.required_ruby_version = ">= 3.1.0"
 
-  spec.add_dependency "bridgetown", ">= 1.3.0", "< 2.0"
+  spec.add_dependency "bridgetown", ">= 1.3.0", "< 3.0"
   spec.add_dependency "image_optim", "~> 0.27"
   spec.add_dependency "image_processing", "~> 1.0"
 
